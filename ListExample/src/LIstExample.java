@@ -8,6 +8,8 @@ public class LIstExample {
 
         list.add(1,"Baram");
         System.out.println(list.getLast());
+
+        System.out.println(list.get(1));
     }
 }
 
