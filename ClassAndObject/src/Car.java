@@ -15,7 +15,7 @@ public class Car {
 
         System.out.println("Brand : "+c1.brand);
         System.out.println("Model : "+c1.model);
-        
+
         System.out.println("Current Speed : " + c1.speed);
         System.out.println("After speed Increase : " +c1.increaseSpeed(c1.speed));
     }

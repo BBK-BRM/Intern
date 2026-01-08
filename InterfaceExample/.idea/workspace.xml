@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c5201549-0103-414a-8881-4e0f0a3c0f7e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../EncapsulationExample/EncapsulationExample.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../EncapsulationExample/src/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../InheritanceExample/InheritanceExample.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../InheritanceExample/src/Animal.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../InheritanceExample/src/Employee.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../InheritanceExample/src/Manager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Payemnt.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/PaymentImplementation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PolymorphismExample/PolymorphismExample.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PolymorphismExample/src/MethodOverloadingExample.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PolymorphismExample/src/methodOverridingExample.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../shape/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ClassAndObject/src/Car.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ClassAndObject/src/Car.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../shape/src/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/../shape/src/Shape.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="37xw3TENrjf1E3PxhHNFPeGrVGq" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.PaymentImplementation.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c5201549-0103-414a-8881-4e0f0a3c0f7e" name="Changes" comment="" />
+      <created>1767857832282</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1767857832282</updated>
+    </task>
+    <servers />
+  </component>
+</project>

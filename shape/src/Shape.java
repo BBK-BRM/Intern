@@ -1,30 +1,17 @@
 abstract class Shape {
-    abstract void sayName();
-}
-
-class Rectangle extends Shape{
-    @Override
-    void sayName(){
-        System.out.println("This is a Rectangle");
+    void calculateArea(float r){
+        System.out.println("Area of circle : "+(Math.PI*r*r));
+    }
+    void calculateArea(float l,float b){
+        System.out.println("Area of Rectangle : "+(l * b));
     }
 }
 
-class Circle extends Shape{
-    @Override
-    void sayName(){
-        System.out.println("This is a Circle");
-    }
-}
-
-class Main{
+class Main extends Shape{
     static void main() {
-
-        Shape r = new Rectangle();
-        r.sayName();
-
-        Shape c = new Circle();
-        c.sayName();
-
+        Main m = new Main();
+        m.calculateArea(3);
+        m.calculateArea(2,3);
 
     }
 }
