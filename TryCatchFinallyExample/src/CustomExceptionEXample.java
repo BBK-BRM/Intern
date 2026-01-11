@@ -1,4 +1,3 @@
-import java.nio.channels.ScatteringByteChannel;
 import java.util.Scanner;
 
 class CustomException extends Exception{
@@ -19,6 +18,7 @@ public class CustomExceptionEXample {
             int age = obj.nextInt();
             try {
                 checkAge(age);
+                System.out.println("you are 18+");
             }catch (CustomException ce){
                 System.out.println("Custom Exception caught from catch.");
             }
