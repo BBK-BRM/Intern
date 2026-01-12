@@ -4,7 +4,8 @@ import java.util.Iterator;
 public class Services {
     ArrayList<Employee> employees = new ArrayList<>();
 
-    int id =100;
+    private static int id =100;
+
     public void addEmployee(String name,int age,String post){
         employees.add(new Employee(++id,name,age,post));
         System.out.println("Employee Added Successfully.");
