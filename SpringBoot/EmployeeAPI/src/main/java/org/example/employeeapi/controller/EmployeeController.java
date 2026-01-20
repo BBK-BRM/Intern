@@ -1,7 +1,7 @@
 package org.example.employeeapi.controller;
 
 import org.example.employeeapi.entity.Employee;
-import org.example.employeeapi.service.EmployeeServiceImpl;
+import org.example.employeeapi.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.Optional;
 public class EmployeeController {
 
 //    @Autowired
-    private final EmployeeServiceImpl employeeServiceImpl;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeServiceImpl employeeService){
-        this.employeeServiceImpl = employeeService;
+    public EmployeeController(EmployeeService employeeService){
+        this.employeeService = employeeService;
     }
 
     @GetMapping ("/")
@@ -24,27 +24,27 @@ public class EmployeeController {
 
     @PostMapping("/add")
     public Employee addEmployee(@RequestBody Employee employee) {
-        return employeeServiceImpl.addEmployee(employee);
+        return employeeService.addEmployee(employee);
     }
 
     @GetMapping("/search/{id}")
     public Optional<Employee> searchEmployee(@PathVariable("id") int userId) {
-        return employeeServiceImpl.findEmployeeById(userId);
+        return employeeService.findEmployeeById(userId);
     }
 
     @GetMapping("/display")
     public List<Employee> displayEmployee() {
-        return employeeServiceImpl.findAllEmployee();
+        return employeeService.findAllEmployee();
     }
 
     @PutMapping("/update/{id}")
     public Employee updateEmployee(@PathVariable("id") int userId,@RequestBody Employee employee) {
-        return employeeServiceImpl.updateEmployee(employee,userId);
+        return employeeService.updateEmployee(employee,userId);
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable("id") int userId) {
-        employeeServiceImpl.deleteEmployee(userId);
+        employeeService.deleteEmployee(userId);
         return "delete Employee successfully";
     }
 }

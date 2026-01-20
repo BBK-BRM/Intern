@@ -1,9 +1,22 @@
 package com.example.employeemanagementsystem.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table (name = "employees")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class EmployeeEntity {
-    private long id;
+
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
     private int age;
     private String post;
-
 }
