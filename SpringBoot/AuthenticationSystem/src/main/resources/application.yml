@@ -1,0 +1,14 @@
+spring:
+  application.name: AuthenticationSystem
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/authentication_system
+    driver-class-name: org.postgresql.Driver
+    username: bibekbaram
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
