@@ -5,7 +5,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor (force = true)
+@NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeResponse {
     private  Long id;

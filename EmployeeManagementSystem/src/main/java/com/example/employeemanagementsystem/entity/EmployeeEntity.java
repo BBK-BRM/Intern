@@ -6,8 +6,8 @@ import lombok.*;
 @Entity
 @Table (name = "employees")
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class EmployeeEntity {
@@ -16,7 +16,9 @@ public class EmployeeEntity {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column (nullable = false)
     private String name;
+
     private int age;
     private String post;
 }
