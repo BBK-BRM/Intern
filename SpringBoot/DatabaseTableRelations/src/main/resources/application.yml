@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: DatabaseTableRelations
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/database_demo
+    username: bibekbaram
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
