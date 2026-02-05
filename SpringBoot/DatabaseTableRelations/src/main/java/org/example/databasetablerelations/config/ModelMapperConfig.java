@@ -14,7 +14,7 @@ public class ModelMapperConfig {
            .setMatchingStrategy(MatchingStrategies.STRICT)
            .setFieldMatchingEnabled(true)
            .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
-           .setDeepCopyEnabled(true)
+//           .setDeepCopyEnabled(true)
            .setSkipNullEnabled(true);
    return modelMapper;
  }

@@ -21,6 +21,6 @@ public class CoursesEntity {
 
     private String courseName;
 
-    @ManyToMany (mappedBy = "enrolledCourses")
-    private List<StudentsEntity> students = new ArrayList<>();
+//    @ManyToMany (mappedBy = "enrolledCourses")
+//    private List<StudentsEntity> students = new ArrayList<>();
 }

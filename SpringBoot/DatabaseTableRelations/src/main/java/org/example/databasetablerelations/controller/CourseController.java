@@ -3,7 +3,10 @@ package org.example.databasetablerelations.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.databasetablerelations.payload.request.CourseRequest;
+import org.example.databasetablerelations.payload.request.PaginatedDataRequest;
 import org.example.databasetablerelations.payload.response.CourseResponse;
+import org.example.databasetablerelations.payload.response.GlobalResponse;
+import org.example.databasetablerelations.payload.response.PaginatedDataResponse;
 import org.example.databasetablerelations.service.CourseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,20 +22,24 @@ public class CourseController {
     private final CourseService courseService;
 
     @PostMapping
-    public ResponseEntity<String> createCourse(@Valid @RequestBody CourseRequest request){
-        courseService.createCourse(request);
-        return new ResponseEntity<>("course created",HttpStatus.CREATED);
+    public ResponseEntity<GlobalResponse> createCourse(@Valid @RequestBody CourseRequest request){
+        return new ResponseEntity<>(courseService.createCourse(request),HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseResponse>> displayAllCourses(){
+    public ResponseEntity<GlobalResponse> displayAllCourses(){
         return ResponseEntity.ok(courseService.displayAllCourses());
     }
 
+    @PostMapping("/paginatedCourses")
+    public ResponseEntity<GlobalResponse> displayPaginatedCourses(@RequestBody PaginatedDataRequest request){
+        return ResponseEntity.ok(courseService.displayPaginatedCourses(request));
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCourse(@PathVariable Long id,@Valid @RequestBody CourseRequest request){
-        courseService.updateCourse(id,request);
-        return ResponseEntity.ok("course updated");
+    public ResponseEntity<GlobalResponse> updateCourse(@PathVariable Long id,@Valid @RequestBody CourseRequest request){
+
+        return ResponseEntity.ok(courseService.updateCourse(id,request));
     }
 
     @DeleteMapping("/{id}")
