@@ -1,10 +1,7 @@
 package org.example.studentmanagementsystem.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.example.studentmanagementsystem.Enum.DeleteFlag;
 
@@ -21,6 +18,8 @@ public class BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private DeleteFlag deleteFlag;
-//    private DeleteFlag deleteFlag = DeleteFlag.FALSE;
+    @Column (nullable = false)
+    @Builder.Default
+//    private DeleteFlag deleteFlag;
+    private DeleteFlag deleteFlag = DeleteFlag.FALSE;
 }

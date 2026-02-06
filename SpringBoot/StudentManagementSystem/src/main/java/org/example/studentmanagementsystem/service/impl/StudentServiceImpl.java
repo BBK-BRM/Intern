@@ -44,7 +44,7 @@ public class StudentServiceImpl implements StudentService {
                 .temporaryAddress(temporaryAddress)
                 .permanentAddress(permanentAddress)
                 .course(course)
-                .deleteFlag(DeleteFlag.FALSE)
+//                .deleteFlag(DeleteFlag.FALSE)
                 .build();
         studentRepository.save(student);
     }
@@ -85,9 +85,9 @@ public class StudentServiceImpl implements StudentService {
         StudentEntity student = studentRepository.findByIdAndDeleteFlag(id,DeleteFlag.FALSE)
                 .orElseThrow(()->new ResourseNotFoundException("Student not found"));
 
-//        if(studentRepository.existsByPhoneNumber(request.getPhoneNumber())){
-//            throw new ResourceAlreadyExistsException("Student already exists.");
-//        }
+        if(studentRepository.existsByPhoneNumber(request.getPhoneNumber())){
+            throw new ResourceAlreadyExistsException("Student already exists.");
+        }
 
         CourseEntity course = courseRepository.findByCourseName(request.getCourseName())
                 .orElseThrow(()->new ResourseNotFoundException("Course Not Found."));
@@ -95,14 +95,13 @@ public class StudentServiceImpl implements StudentService {
         AddressEntity permanentAddress = modelMapper.map(request.getPermanentAddress(),AddressEntity.class);
         AddressEntity temporaryAddress = modelMapper.map(request.getTemporaryAddress(),AddressEntity.class);
 
-        student = StudentEntity.builder()
-                .studentName(request.getStudentName())
-                .phoneNumber(request.getPhoneNumber())
-                .temporaryAddress(temporaryAddress)
-                .permanentAddress(permanentAddress)
-                .course(course)
-                .deleteFlag(DeleteFlag.FALSE)
-                .build();
+        student.setStudentName(request.getStudentName());
+        student.setPhoneNumber(request.getPhoneNumber());
+        student.setTemporaryAddress(temporaryAddress);
+        student.setPermanentAddress(permanentAddress);
+        student.setCourse(course);
+        // student.setDeleteFlag(DeleteFlag.FALSE);
+
         studentRepository.save(student);
     }
 
@@ -111,6 +110,8 @@ public class StudentServiceImpl implements StudentService {
         StudentEntity student = studentRepository.findByIdAndDeleteFlag(id,DeleteFlag.FALSE)
                 .orElseThrow(()->new ResourseNotFoundException("Student not found."));
         student.setDeleteFlag(DeleteFlag.TRUE);
+        student.getPermanentAddress().setDeleteFlag(DeleteFlag.TRUE);
+        student.getTemporaryAddress().setDeleteFlag(DeleteFlag.TRUE);
         studentRepository.save(student);
     }
 }

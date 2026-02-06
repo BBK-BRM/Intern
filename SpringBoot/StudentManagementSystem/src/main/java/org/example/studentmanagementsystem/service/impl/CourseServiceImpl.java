@@ -5,11 +5,19 @@ import org.example.studentmanagementsystem.entity.CourseEntity;
 import org.example.studentmanagementsystem.Enum.DeleteFlag;
 import org.example.studentmanagementsystem.entity.ProfessorEntity;
 import org.example.studentmanagementsystem.exception.ResourseNotFoundException;
+import org.example.studentmanagementsystem.payload.request.CourseDataRequest;
 import org.example.studentmanagementsystem.payload.request.CourseRequest;
+import org.example.studentmanagementsystem.payload.request.PageDataRequest;
 import org.example.studentmanagementsystem.payload.response.CourseResponse;
+import org.example.studentmanagementsystem.payload.response.PaginatedDataResponse;
 import org.example.studentmanagementsystem.repository.CourseRepository;
 import org.example.studentmanagementsystem.service.CourseService;
+import org.example.studentmanagementsystem.service.specification.CourseSpecification;
+import org.example.studentmanagementsystem.util.Helper;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,18 +33,18 @@ public class CourseServiceImpl implements CourseService {
     public void createCourse(CourseRequest request) {
         ProfessorEntity professor = ProfessorEntity.builder()
                 .professorName(request.getProfessorName())
-                .deleteFlag(DeleteFlag.FALSE)
+//                .deleteFlag(DeleteFlag.FALSE)
                 .build();
         CourseEntity course = CourseEntity.builder()
                 .courseName(request.getCourseName())
                 .professor(professor)
-                .deleteFlag(DeleteFlag.FALSE)
+//                .deleteFlag(DeleteFlag.FALSE)
                 .build();
         courseRepository.save(course);
     }
 
     @Override
-    public List<CourseResponse> displayAllCourses(){
+    public List<CourseResponse> displayAllActiveCourses(){
         List<CourseEntity> courses = courseRepository.findAllByDeleteFlag(DeleteFlag.FALSE);
 
 //        List<CourseResponse> responses = courses.stream()
@@ -53,16 +61,23 @@ public class CourseServiceImpl implements CourseService {
         return responses;
     }
 
+    public PaginatedDataResponse displayAllCourses(CourseDataRequest request){
+        Specification<CourseEntity> specification = CourseSpecification.courseFilter(request);
+        Page<CourseEntity> page =  courseRepository.findAll(specification,Helper.getPage(request));
+        List<CourseResponse> courseResponses = page.stream()
+                .map(courseEntity -> modelMapper.map(courseEntity,CourseResponse.class))
+                .toList();
+        PaginatedDataResponse response = new PaginatedDataResponse(page.getTotalPages(), courseResponses);
+        return response;
+    }
+
     @Override
     public void updateCourse(Long id, CourseRequest request) {
         CourseEntity course  = courseRepository.findByIdAndDeleteFlag(id,DeleteFlag.FALSE)
                 .orElseThrow(()->new ResourseNotFoundException("Course not found."));
         course.setCourseName(request.getCourseName());
-        ProfessorEntity professor =ProfessorEntity.builder()
-                .professorName(request.getProfessorName())
-                .deleteFlag(DeleteFlag.FALSE)
-                .build();
-        course.setProfessor(professor);
+        course.getProfessor().setProfessorName(request.getProfessorName());
+
         courseRepository.save(course);
     }
 
