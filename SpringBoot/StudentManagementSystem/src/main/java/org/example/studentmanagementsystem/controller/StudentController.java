@@ -2,7 +2,9 @@ package org.example.studentmanagementsystem.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.studentmanagementsystem.payload.request.ChangeStatusRequest;
 import org.example.studentmanagementsystem.payload.request.StudentRequest;
+import org.example.studentmanagementsystem.payload.response.GlobalResponse;
 import org.example.studentmanagementsystem.payload.response.StudentResponse;
 import org.example.studentmanagementsystem.service.impl.StudentServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -18,32 +20,27 @@ public class StudentController {
     private final StudentServiceImpl studentService;
 
     @PostMapping
-    public ResponseEntity<String> createStudent(@Valid @RequestBody StudentRequest request){
-        studentService.createStudent(request);
-        return new ResponseEntity<>("Student Added Successfully",HttpStatus.CREATED);
+    public ResponseEntity<GlobalResponse> createStudent(@Valid @RequestBody StudentRequest request){
+        return new ResponseEntity<>(studentService.createStudent(request),HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentResponse>> displayAllStudents(){
-        List<StudentResponse> response = studentService.displayStudents();
-        return ResponseEntity.ok(response);
+    public ResponseEntity<GlobalResponse> displayAllStudents(){
+        return ResponseEntity.ok(studentService.displayStudents());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentResponse> displayStudentById(@PathVariable Long id){
-        StudentResponse response = studentService.displayStudentById(id);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<GlobalResponse> displayStudentById(@PathVariable Long id){
+        return ResponseEntity.ok(studentService.displayStudentById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateStudentById(@PathVariable Long id,@RequestBody StudentRequest request){
-        studentService.updateStudent(request,id);
-        return ResponseEntity.ok("Student updated sucessfully");
+    public ResponseEntity<GlobalResponse> updateStudentById(@PathVariable Long id,@RequestBody StudentRequest request){
+        return ResponseEntity.ok(studentService.updateStudent(request,id));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable Long id){
-        studentService.deleteStudent(id);
-        return ResponseEntity.ok("Student Deleted Successfully");
+    @PatchMapping("/{id}")
+    public ResponseEntity<GlobalResponse> deleteStudent(@PathVariable Long id, @Valid @RequestBody ChangeStatusRequest status){
+        return ResponseEntity.ok(studentService.changeStatusStudent(id,status));
     }
 }

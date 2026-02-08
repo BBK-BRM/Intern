@@ -1,14 +1,19 @@
 package org.example.studentmanagementsystem.service;
 
+import org.example.studentmanagementsystem.payload.request.ChangeStatusRequest;
+import org.example.studentmanagementsystem.payload.request.StudentDataRequest;
 import org.example.studentmanagementsystem.payload.request.StudentRequest;
+import org.example.studentmanagementsystem.payload.response.GlobalResponse;
+
 import org.example.studentmanagementsystem.payload.response.StudentResponse;
 
 import java.util.List;
 
 public interface StudentService {
-    void createStudent(StudentRequest request);
-    List<StudentResponse> displayStudents();
-    StudentResponse displayStudentById(Long id);
-    void updateStudent(StudentRequest request,Long id);
-    void deleteStudent(Long id);
+    GlobalResponse createStudent(StudentRequest request);
+    GlobalResponse displayStudents();
+    GlobalResponse displayAllStudents(StudentDataRequest request);
+    GlobalResponse displayStudentById(Long id);
+    GlobalResponse updateStudent(StudentRequest request,Long id);
+    GlobalResponse changeStatusStudent(Long id, ChangeStatusRequest status);
 }

@@ -2,10 +2,12 @@ package org.example.studentmanagementsystem.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.studentmanagementsystem.payload.request.ChangeStatusRequest;
 import org.example.studentmanagementsystem.payload.request.CourseDataRequest;
 import org.example.studentmanagementsystem.payload.request.CourseRequest;
 import org.example.studentmanagementsystem.payload.request.PageDataRequest;
 import org.example.studentmanagementsystem.payload.response.CourseResponse;
+import org.example.studentmanagementsystem.payload.response.GlobalResponse;
 import org.example.studentmanagementsystem.payload.response.PaginatedDataResponse;
 import org.example.studentmanagementsystem.service.CourseService;
 import org.springframework.http.HttpStatus;
@@ -21,38 +23,32 @@ public class CourseController {
     private final CourseService courseService;
 
     @PostMapping
-    public ResponseEntity<Void> createCourse(@Valid @RequestBody CourseRequest request) {
-        courseService.createCourse(request);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<GlobalResponse> createCourse(@Valid @RequestBody CourseRequest request) {
+        return new ResponseEntity<>(courseService.createCourse(request),HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseResponse>> displayAllActiveCourses() {
-        List<CourseResponse> responses = courseService.displayAllActiveCourses();
-        return ResponseEntity.ok(responses);
+    public ResponseEntity<GlobalResponse> displayAllActiveCourses() {
+        return ResponseEntity.ok(courseService.displayAllActiveCourses());
     }
 
     @PostMapping("all-list")
-    public ResponseEntity<PaginatedDataResponse> displayAllCourses(@RequestBody CourseDataRequest request){
-       PaginatedDataResponse responses = courseService.displayAllCourses(request);
-       return ResponseEntity.ok(responses);
+    public ResponseEntity<GlobalResponse> displayAllCourses(@RequestBody CourseDataRequest request){
+       return ResponseEntity.ok(courseService.displayAllCourses(request));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseResponse> displayCourseById(@PathVariable Long id) {
-        CourseResponse response = courseService.displayById(id);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<GlobalResponse> displayCourseById(@PathVariable Long id) {
+        return ResponseEntity.ok(courseService.displayById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCourse(@PathVariable Long id, @Valid @RequestBody CourseRequest request) {
-        courseService.updateCourse(id, request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<GlobalResponse> updateCourse(@PathVariable Long id, @Valid @RequestBody CourseRequest request) {
+        return ResponseEntity.ok(courseService.updateCourse(id, request));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourses(id);
-        return ResponseEntity.noContent().build();
+    @PatchMapping("/{id}")
+    public ResponseEntity<GlobalResponse> changeStatusCourse(@PathVariable Long id, @Valid @RequestBody ChangeStatusRequest request) {
+        return ResponseEntity.ok(courseService.changeStatusCourses(id,request));
     }
 }

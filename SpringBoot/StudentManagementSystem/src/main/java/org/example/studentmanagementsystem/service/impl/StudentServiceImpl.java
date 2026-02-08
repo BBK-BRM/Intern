@@ -3,17 +3,21 @@ package org.example.studentmanagementsystem.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.studentmanagementsystem.entity.AddressEntity;
 import org.example.studentmanagementsystem.entity.CourseEntity;
-import org.example.studentmanagementsystem.Enum.DeleteFlag;
+import org.example.studentmanagementsystem.Enum.ChangeStatus;
 import org.example.studentmanagementsystem.entity.StudentEntity;
-import org.example.studentmanagementsystem.exception.ResourceAlreadyExistsException;
-import org.example.studentmanagementsystem.exception.ResourseNotFoundException;
+import org.example.studentmanagementsystem.exception.GlobalException;
+import org.example.studentmanagementsystem.payload.request.ChangeStatusRequest;
+import org.example.studentmanagementsystem.payload.request.StudentDataRequest;
 import org.example.studentmanagementsystem.payload.request.StudentRequest;
-import org.example.studentmanagementsystem.payload.response.AddressResponse;
-import org.example.studentmanagementsystem.payload.response.StudentResponse;
+import org.example.studentmanagementsystem.payload.response.*;
 import org.example.studentmanagementsystem.repository.CourseRepository;
 import org.example.studentmanagementsystem.repository.StudentRepository;
 import org.example.studentmanagementsystem.service.StudentService;
+import org.example.studentmanagementsystem.service.specification.StudentSpecification;
+import org.example.studentmanagementsystem.util.Helper;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,14 +30,14 @@ public class StudentServiceImpl implements StudentService {
     private final ModelMapper modelMapper;
 
     @Override
-    public void createStudent(StudentRequest request) {
+    public GlobalResponse createStudent(StudentRequest request) {
 
         if(studentRepository.existsByPhoneNumber(request.getPhoneNumber())){
-            throw new ResourceAlreadyExistsException("Student already exists.");
+            throw new GlobalException("Student already exists.");
         }
 
         CourseEntity course = courseRepository.findByCourseName(request.getCourseName())
-                .orElseThrow(()->new ResourseNotFoundException("Course Not Found."));
+                .orElseThrow(()->new GlobalException("Course Not Found."));
 
         AddressEntity permanentAddress = modelMapper.map(request.getPermanentAddress(),AddressEntity.class);
         AddressEntity temporaryAddress = modelMapper.map(request.getTemporaryAddress(),AddressEntity.class);
@@ -47,11 +51,12 @@ public class StudentServiceImpl implements StudentService {
 //                .deleteFlag(DeleteFlag.FALSE)
                 .build();
         studentRepository.save(student);
+        return GlobalResponseBuilder.buildSuccessResponse("student created");
     }
 
     @Override
-    public List<StudentResponse> displayStudents() {
-        List<StudentEntity> students = studentRepository.findAllByDeleteFlag(DeleteFlag.FALSE);
+    public GlobalResponse displayStudents() {
+        List<StudentEntity> students = studentRepository.findAllByDeleteFlag(ChangeStatus.ACTIVE);
         List<StudentResponse> response = students.stream()
                 .map(student -> StudentResponse.builder()
                         .id(student.getId())
@@ -62,13 +67,32 @@ public class StudentServiceImpl implements StudentService {
                         .temporaryAddress(modelMapper.map(student.getTemporaryAddress(),AddressResponse.class))
                         .build())
                 .toList();
-        return response;
+        return GlobalResponseBuilder.buildSuccessResponseWithData("student found",response);
     }
 
     @Override
-    public StudentResponse displayStudentById(Long id) {
-        StudentEntity student =studentRepository.findByIdAndDeleteFlag(id,DeleteFlag.FALSE)
-                .orElseThrow(()->new ResourseNotFoundException("Student not found"));
+    public GlobalResponse displayAllStudents(StudentDataRequest request) {
+        Specification<StudentEntity> specification = StudentSpecification.studentFilter(request);
+        Page<StudentEntity> page = studentRepository.findAll(specification, Helper.getPage(request));
+        List<StudentResponse> studentResponses = page.stream()
+                .map(student -> StudentResponse.builder()
+                        .id(student.getId())
+                        .studentName(student.getStudentName())
+                        .phoneNumber(student.getPhoneNumber())
+                        .courseName(student.getCourse().getCourseName())
+                        .permanentAddress(modelMapper.map(student.getPermanentAddress(),AddressResponse.class))
+                        .temporaryAddress(modelMapper.map(student.getTemporaryAddress(),AddressResponse.class))
+                        .build())
+                .toList();
+        PaginatedDataResponse paginatedDataResponse = new PaginatedDataResponse(page.getTotalPages(), studentResponses);
+        return GlobalResponseBuilder.buildSuccessResponseWithData("course found",paginatedDataResponse);
+    }
+
+
+    @Override
+    public GlobalResponse displayStudentById(Long id) {
+        StudentEntity student =studentRepository.findByIdAndDeleteFlag(id, ChangeStatus.ACTIVE)
+                .orElseThrow(()->new GlobalException("Student not found"));
         StudentResponse response = StudentResponse.builder()
                 .id(student.getId())
                 .studentName(student.getStudentName())
@@ -77,20 +101,20 @@ public class StudentServiceImpl implements StudentService {
                 .permanentAddress(modelMapper.map(student.getPermanentAddress(),AddressResponse.class))
                 .temporaryAddress(modelMapper.map(student.getTemporaryAddress(),AddressResponse.class))
                 .build();
-        return response;
+        return GlobalResponseBuilder.buildSuccessResponseWithData("student found",response);
     }
 
     @Override
-    public void updateStudent(StudentRequest request, Long id) {
-        StudentEntity student = studentRepository.findByIdAndDeleteFlag(id,DeleteFlag.FALSE)
-                .orElseThrow(()->new ResourseNotFoundException("Student not found"));
+    public GlobalResponse updateStudent(StudentRequest request, Long id) {
+        StudentEntity student = studentRepository.findByIdAndDeleteFlag(id, ChangeStatus.ACTIVE)
+                .orElseThrow(()->new GlobalException("Student not found"));
 
         if(studentRepository.existsByPhoneNumber(request.getPhoneNumber())){
-            throw new ResourceAlreadyExistsException("Student already exists.");
+            throw new GlobalException("Student already exists.");
         }
 
         CourseEntity course = courseRepository.findByCourseName(request.getCourseName())
-                .orElseThrow(()->new ResourseNotFoundException("Course Not Found."));
+                .orElseThrow(()->new GlobalException("Course Not Found."));
 
         AddressEntity permanentAddress = modelMapper.map(request.getPermanentAddress(),AddressEntity.class);
         AddressEntity temporaryAddress = modelMapper.map(request.getTemporaryAddress(),AddressEntity.class);
@@ -103,15 +127,17 @@ public class StudentServiceImpl implements StudentService {
         // student.setDeleteFlag(DeleteFlag.FALSE);
 
         studentRepository.save(student);
+        return GlobalResponseBuilder.buildSuccessResponse("student updated");
     }
 
     @Override
-    public void deleteStudent(Long id) {
-        StudentEntity student = studentRepository.findByIdAndDeleteFlag(id,DeleteFlag.FALSE)
-                .orElseThrow(()->new ResourseNotFoundException("Student not found."));
-        student.setDeleteFlag(DeleteFlag.TRUE);
-        student.getPermanentAddress().setDeleteFlag(DeleteFlag.TRUE);
-        student.getTemporaryAddress().setDeleteFlag(DeleteFlag.TRUE);
+    public GlobalResponse changeStatusStudent(Long id, ChangeStatusRequest status) {
+        StudentEntity student = studentRepository.findById(id)
+                .orElseThrow(()->new GlobalException("Student not found."));
+        student.setStatus(status.getStatus());
+        student.getPermanentAddress().setStatus(status.getStatus());
+        student.getTemporaryAddress().setStatus(status.getStatus());
         studentRepository.save(student);
+        return GlobalResponseBuilder.buildSuccessResponse("student status changed");
     }
 }
